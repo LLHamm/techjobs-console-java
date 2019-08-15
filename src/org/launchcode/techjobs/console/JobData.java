@@ -1,8 +1,10 @@
 package org.launchcode.techjobs.console;
 
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import sun.awt.SunHints;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -72,16 +74,33 @@ public class JobData {
 
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
-        for (HashMap<String, String> row : allJobs) {
-
+        for (HashMap<String, String> row: allJobs) {
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
 
         return jobs;
+
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        loadData();
+        //initialize empty ArrayList and name it
+        ArrayList<HashMap<String, String>> result = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+            for (String s : row.values()) {
+                if (s.toLowerCase().contains(value.toLowerCase())) {
+                    result.add(row);
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
